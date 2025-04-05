@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'pl.kaxtusik'
-version = '1.0-HOTFIX'
+version = '1.0-RELEASE'
 
 repositories {
     mavenCentral()
