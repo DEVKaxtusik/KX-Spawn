@@ -10,19 +10,24 @@ import java.util.UUID;
 
 public class SpawnManager {
     private Location spawnLocation;
-    private Config config = Plugin.INSTANCE.getPluginConfig();
-    private Map<UUID, Long> toTeleport = new HashMap<>();
+    private Config config;
+    private final Map<UUID, Long> toTeleport = new HashMap<>();
 
-    public SpawnManager() {
+    public SpawnManager(Plugin plugin) {
+        this.config = plugin.getPluginConfig();
         this.spawnLocation = config.getSpawnLocation();
     }
 
     public void addToTeleport(UUID playerUUID) {
-        toTeleport.put(playerUUID, System.currentTimeMillis());
+        if (playerUUID != null) {
+            toTeleport.put(playerUUID, System.currentTimeMillis());
+        }
     }
 
     public void removeFromTeleport(UUID playerUUID) {
-        toTeleport.remove(playerUUID);
+        if (playerUUID != null) {
+            toTeleport.remove(playerUUID);
+        }
     }
 
     public Map<UUID, Long> getToTeleport() {
@@ -38,6 +43,8 @@ public class SpawnManager {
     }
 
     public void updateSpawnLocation(Location newLocation) {
-        this.spawnLocation = newLocation;
+        if (newLocation != null) {
+            this.spawnLocation = newLocation;
+        }
     }
 }

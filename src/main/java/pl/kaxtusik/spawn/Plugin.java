@@ -66,7 +66,7 @@ public final class Plugin extends JavaPlugin {
     }
 
     private void loadManagers() {
-        spawnManager = new SpawnManager();
+        spawnManager = new SpawnManager(this);
     }
 
     private void startTasks() {

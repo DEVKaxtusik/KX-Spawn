@@ -19,9 +19,9 @@ public class SpawnTask implements Runnable {
     private final SpawnManager spawnManager;
     private final FoliaLib foliaLib;
     private final Messages messages;
+    private final MessagesUtils messagesUtils;
     private int timeToTeleport;
     private boolean canMove;
-    private final static MessagesUtils messagesUtils = new MessagesUtils();
     private final Map<UUID, Location> lastLocations = new ConcurrentHashMap<>();
     private final Map<UUID, Long> lastMessageTimes = new ConcurrentHashMap<>();
 
@@ -29,16 +29,17 @@ public class SpawnTask implements Runnable {
         this.spawnManager = plugin.getSpawnManager();
         this.foliaLib = plugin.getFoliaLib();
         this.messages = plugin.getMessages();
+        this.messagesUtils = new MessagesUtils();
         this.timeToTeleport = plugin.getPluginConfig().getTimeToTeleport();
         this.canMove = plugin.getPluginConfig().isCanMove();
     }
 
     @Override
     public void run() {
-        if (!spawnManager.isSpawnSet()) {
-            spawnManager.getToTeleport().clear();
-            lastLocations.clear();
-            lastMessageTimes.clear();
+        if (spawnManager == null || !spawnManager.isSpawnSet()) {
+            if (spawnManager != null) {
+                spawnManager.getToTeleport().clear();
+            }
             return;
         }
 
@@ -50,32 +51,25 @@ public class SpawnTask implements Runnable {
 
             Player player = Bukkit.getPlayer(uuid);
             if (player == null || !player.isOnline()) {
-                cleanup(uuid);
+                spawnManager.removeFromTeleport(uuid);
                 return true;
             }
 
             if (!canMove && hasPlayerMoved(player)) {
-                messagesUtils.message(player,
-                        messages.getTeleportCancelled().getType(),
-                        messages.getTeleportCancelled().getMessage());
-                cleanup(uuid);
+                messagesUtils.message(player, messages.getTeleportCancelled().getType(), messages.getTeleportCancelled().getMessage());
+                spawnManager.removeFromTeleport(uuid);
                 return true;
             }
 
             if (elapsedSeconds >= timeToTeleport) {
                 foliaLib.getScheduler().teleportAsync(player, spawnManager.getSpawnLocation());
-                player.sendMessage(ColorUtils.formatToComponent(
-                        messages.getTeleporting().getMessage().replace("{TIME}", "0"))
-                );
-                cleanup(uuid);
+                messagesUtils.message(player, messages.getTeleported().getType(), messages.getTeleported().getMessage());
+                spawnManager.removeFromTeleport(uuid);
                 return true;
             } else {
                 long lastMessageTime = lastMessageTimes.getOrDefault(uuid, 0L);
                 if (currentTime - lastMessageTime >= 1000) {
-                    player.sendMessage(ColorUtils.formatToComponent(
-                            messages.getTeleporting().getMessage()
-                                    .replace("{TIME}", String.valueOf(timeToTeleport - elapsedSeconds)))
-                    );
+                    messagesUtils.message(player, messages.getTeleporting().getType(), messages.getTeleporting().getMessage().replace("{TIME}", String.valueOf(timeToTeleport - elapsedSeconds)));
                     lastMessageTimes.put(uuid, currentTime);
                 }
             }
@@ -84,7 +78,9 @@ public class SpawnTask implements Runnable {
     }
 
     public void updateTimeToTeleport(int newTimeToTeleport) {
-        this.timeToTeleport = newTimeToTeleport;
+        if (newTimeToTeleport > 0) {
+            this.timeToTeleport = newTimeToTeleport;
+        }
     }
 
     public void updateCanMove(boolean newCanMove) {
@@ -92,20 +88,26 @@ public class SpawnTask implements Runnable {
     }
 
     private boolean hasPlayerMoved(Player player) {
+        if (player == null) {
+            return false;
+        }
+
         UUID uuid = player.getUniqueId();
         Location currentLocation = player.getLocation();
         Location lastLocation = lastLocations.get(uuid);
-        boolean moved = lastLocation != null &&
-                (currentLocation.getBlockX() != lastLocation.getBlockX() ||
-                        currentLocation.getBlockY() != lastLocation.getBlockY() ||
-                        currentLocation.getBlockZ() != lastLocation.getBlockZ());
-        lastLocations.put(uuid, currentLocation);
-        return moved;
-    }
 
-    private void cleanup(UUID uuid) {
-        spawnManager.removeFromTeleport(uuid);
-        lastLocations.remove(uuid);
-        lastMessageTimes.remove(uuid);
+        if (currentLocation == null) {
+            return false;
+        }
+
+        if (lastLocation != null &&
+                currentLocation.getBlockX() == lastLocation.getBlockX() &&
+                currentLocation.getBlockY() == lastLocation.getBlockY() &&
+                currentLocation.getBlockZ() == lastLocation.getBlockZ()) {
+            return false;
+        }
+
+        lastLocations.put(uuid, currentLocation);
+        return true;
     }
 }
