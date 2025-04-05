@@ -1,0 +1,7 @@
+name: KX-Spawn
+version: '1.0-HOTFIX'
+main: pl.kaxtusik.spawn.Plugin
+folia-supported: true
+description: 'A simple lightweight spawn plugin that supports Folia.'
+api-version: '1.18'
+authors: [ kaxtusik ]
