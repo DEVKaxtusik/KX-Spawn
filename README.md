@@ -29,6 +29,7 @@ Welcome to the **KX-Spawn** plugin! 🎉 This is a simple, lightweight spawn plu
 - `kx.spawn.use` - Allows the use of the `/spawn` command.
 - `kx.spawn.set` - Allows setting the spawn location.
 - `kx.spawn.reload` - Allows reloading the plugin configuration and messages.
+- `kx.spawn.bypass` - With this permission user can bypass required spawn teleportation time.
 
 ## ⚙️ Configuration
 
