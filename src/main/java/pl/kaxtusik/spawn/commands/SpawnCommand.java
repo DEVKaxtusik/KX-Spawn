@@ -34,23 +34,23 @@ public class SpawnCommand {
 
     @Execute
     void spawn(@Sender Player player, @Arg Optional<Player> target) {
+        if (!spawnManager.isSpawnSet()) {
+            MESSAGES_UTILS.message(player, messages.getSpawnNotSet().getType(), messages.getSpawnNotSet().getMessage());
+            return;
+        }
         if (target.isPresent()) {
+            if (!player.hasPermission("kx.spawn.others")) {
+                MESSAGES_UTILS.message(player, messages.getNoPermission().getType(), messages.getNoPermission().getMessage().replace("{PERMISSION}", "kx.spawn.others"));
+                return;
+            }
             plugin.getFoliaLib().getScheduler().teleportAsync(target.get(), spawnManager.getSpawnLocation());
             MESSAGES_UTILS.message(target.get(), messages.getTeleported().getType(), messages.getTeleported().getMessage());
             return;
         }
-        spawnManager.addToTeleport(player.getUniqueId());
-    }
-
-    @Execute
-    @Permission("kx.spawn.others")
-    void spawn(@Sender CommandSender sender, @Arg Player target) {
-        if (target != null) {
-            plugin.getFoliaLib().getScheduler().teleportAsync(target, spawnManager.getSpawnLocation());
-            MESSAGES_UTILS.message(target, messages.getTeleported().getType(), messages.getTeleported().getMessage());
+        if (player.hasPermission("kx.spawn.bypass")) {
+            plugin.getFoliaLib().getScheduler().teleportAsync(player,config.getSpawnLocation());
         }
-        MESSAGES_UTILS.message(sender, messages.getTeleportingOthers().getType(), messages.getTeleportingOthers().getMessage()
-                .replace("{PLAYER}", target.getName()));
+        spawnManager.addToTeleport(player.getUniqueId());
     }
 
     @Execute(name = "set")

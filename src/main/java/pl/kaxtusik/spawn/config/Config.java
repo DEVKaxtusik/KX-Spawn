@@ -9,12 +9,18 @@ public class Config extends OkaeriConfig {
     @Comment("Spawn location")
     private Location spawnLocation;
 
+    @Comment("Should a player be teleported when they first join")
+    private boolean teleportOnFirstJoin = true;
+
+    @Comment("Should plugin respawn player on spawn after death")
+    private boolean respawnOnSpawn = true;
+
     @Comment("Time to teleport")
     private int timeToTeleport = 5;
 
     @Comment("Can player move during teleportation")
     private boolean canMove = true;
-
+    
     public Location getSpawnLocation() {
         return spawnLocation;
     }
@@ -37,5 +43,13 @@ public class Config extends OkaeriConfig {
 
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;
+    }
+
+    public boolean isRespawnOnSpawn() {
+        return respawnOnSpawn;
+    }
+
+    public boolean isTeleportOnFirstJoin() {
+        return teleportOnFirstJoin;
     }
 }

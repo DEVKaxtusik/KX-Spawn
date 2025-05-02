@@ -4,14 +4,14 @@ import org.bukkit.Location;
 import pl.kaxtusik.spawn.Plugin;
 import pl.kaxtusik.spawn.config.Config;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SpawnManager {
     private Location spawnLocation;
     private Config config;
-    private final Map<UUID, Long> toTeleport = new HashMap<>();
+    private final Map<UUID, Long> toTeleport = new ConcurrentHashMap<>();
 
     public SpawnManager(Plugin plugin) {
         this.config = plugin.getPluginConfig();
@@ -21,6 +21,12 @@ public class SpawnManager {
     public void addToTeleport(UUID playerUUID) {
         if (playerUUID != null) {
             toTeleport.put(playerUUID, System.currentTimeMillis());
+        }
+    }
+
+    public void addToTeleport(UUID playerUUID, long ms) {
+        if (playerUUID != null) {
+            toTeleport.put(playerUUID, ms);
         }
     }
 

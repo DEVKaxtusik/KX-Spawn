@@ -3,6 +3,8 @@ package pl.kaxtusik.spawn;
 import com.tcoded.folialib.FoliaLib;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
+import dev.rollczi.litecommands.bukkit.LiteBukkitMessages;
+import dev.rollczi.litecommands.message.LiteMessages;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
@@ -10,9 +12,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.kaxtusik.spawn.commands.SpawnCommand;
+import pl.kaxtusik.spawn.commands.resolvers.InvalidUsageResolver;
+import pl.kaxtusik.spawn.commands.resolvers.PermissionResolver;
 import pl.kaxtusik.spawn.config.Config;
 import pl.kaxtusik.spawn.config.Messages;
 import pl.kaxtusik.spawn.config.serializer.MessageSerializer;
+import pl.kaxtusik.spawn.controllers.FirstJoinEvent;
 import pl.kaxtusik.spawn.manager.SpawnManager;
 import pl.kaxtusik.spawn.tasks.SpawnTask;
 import pl.kaxtusik.spawn.utils.ColorUtils;
@@ -36,6 +41,7 @@ public final class Plugin extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         foliaLib = new FoliaLib(this);
+        foliaLib.disableInvalidTickValueWarning();
         new ColorUtils();
         this.getLogger().info(VersionUtil.getDistribution() + " " + VersionUtil.getVersion().split("-")[0]);
         loadConfig();
@@ -43,6 +49,7 @@ public final class Plugin extends JavaPlugin {
         loadManagers();
         startTasks();
         loadCommands();
+        this.getServer().getPluginManager().registerEvents(new FirstJoinEvent(this),this);
     }
 
     private void loadConfig() {
@@ -77,6 +84,8 @@ public final class Plugin extends JavaPlugin {
     private void loadCommands() {
         this.liteCommands = LiteBukkitFactory.builder("kx",this)
                 .commands(new SpawnCommand(this))
+                .missingPermission(new PermissionResolver(this))
+                .invalidUsage(new InvalidUsageResolver(this))
                 .build();
     }
 
@@ -98,6 +107,7 @@ public final class Plugin extends JavaPlugin {
                 foliaLib.getScheduler().runAtEntity(entity, task -> {
                     spawnTask.updateTimeToTeleport(config.getTimeToTeleport());
                     spawnTask.updateCanMove(config.isCanMove());
+                    spawnManager.updateSpawnLocation(config.getSpawnLocation());
                     messagesUtils.message(sender, messages.getReloadedConfig().getType(), messages.getReloadedConfig().getMessage());
                     getLogger().info("Configuration reloaded in " + (System.currentTimeMillis() - start) + "ms");
                 });
