@@ -1,12 +1,13 @@
 package pl.kaxtusik.spawn.tasks;
 
+import com.cryptomorin.xseries.XSound;
 import com.tcoded.folialib.FoliaLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import pl.kaxtusik.spawn.Plugin;
-import pl.kaxtusik.spawn.manager.SpawnManager;
 import pl.kaxtusik.spawn.config.Messages;
+import pl.kaxtusik.spawn.manager.SpawnManager;
 import pl.kaxtusik.spawn.utils.MessagesUtils;
 
 import java.util.Map;
@@ -64,6 +65,9 @@ public class SpawnTask implements Runnable {
             if (elapsedSeconds >= timeToTeleport) {
                 foliaLib.getScheduler().teleportAsync(player, spawnManager.getSpawnLocation());
                 messagesUtils.message(player, messages.getTeleported().getType(), messages.getTeleported().getMessage());
+                if (!messages.getTeleportedSound().equals("null")) {
+                    XSound.of(messages.getTeleportedSound()).ifPresent(action -> action.play(player));
+                }
                 spawnManager.removeFromTeleport(uuid);
                 lastLocations.remove(uuid);
                 return true;
@@ -75,6 +79,12 @@ public class SpawnTask implements Runnable {
                     .replace("{TIME}", String.valueOf(remainingTime))
                     .replace("{FORMAT}", formattedTimeUnit);
             messagesUtils.message(player, messages.getTeleporting().getType(), teleportMessage);
+            if (!messages.getTeleportingSound().equals("null")) {
+                XSound.of(messages.getTeleportingSound()).ifPresent(sound -> {
+                    float pitch = 0.5f + (0.5f * (timeToTeleport - remainingTime) / timeToTeleport);
+                    sound.play(player, 1.0f, pitch);
+                });
+            }
 
             return false;
         });

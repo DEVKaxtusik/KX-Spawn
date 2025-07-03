@@ -23,6 +23,5 @@ public class PermissionResolver implements MissingPermissionsHandler<CommandSend
     public void handle(Invocation<CommandSender> invocation, MissingPermissions missingPermissions, ResultHandlerChain<CommandSender> chain) {
         final CommandSender sender = invocation.sender();
         messagesUtils.message(sender,messages.getNoPermission().getType(), messages.getNoPermission().getMessage().replace("{PERMISSION}", missingPermissions.asJoinedText()));
-        return;
     }
 }

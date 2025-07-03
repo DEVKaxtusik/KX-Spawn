@@ -28,6 +28,7 @@ public class SpawnManager {
         }
     }
 
+    @Deprecated(forRemoval = true)
     public void addToTeleport(UUID playerUUID, long ms) {
         if (playerUUID != null) {
             toTeleport.put(playerUUID, ms);

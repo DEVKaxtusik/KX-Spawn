@@ -16,8 +16,9 @@ import pl.kaxtusik.spawn.commands.resolvers.PermissionResolver;
 import pl.kaxtusik.spawn.config.Config;
 import pl.kaxtusik.spawn.config.Messages;
 import pl.kaxtusik.spawn.config.serializer.MessageSerializer;
-import pl.kaxtusik.spawn.controllers.FirstJoinEvent;
+import pl.kaxtusik.spawn.listeners.ActionListener;
 import pl.kaxtusik.spawn.manager.SpawnManager;
+import pl.kaxtusik.spawn.metrics.MetricsLite;
 import pl.kaxtusik.spawn.tasks.SpawnTask;
 import pl.kaxtusik.spawn.utils.ColorUtils;
 import pl.kaxtusik.spawn.utils.MessagesUtils;
@@ -50,7 +51,10 @@ public final class Plugin extends JavaPlugin {
         loadManagers();
         startTasks();
         loadCommands();
-        this.getServer().getPluginManager().registerEvents(new FirstJoinEvent(this),this);
+        this.getServer().getPluginManager().registerEvents(new ActionListener(this),this);
+        if (config.isEnableMetrics()) {
+            initializeMetrics();
+        }
     }
 
     private void loadConfig() {
@@ -131,6 +135,11 @@ public final class Plugin extends JavaPlugin {
                 getLogger().info("Messages reloaded in " + (System.currentTimeMillis() - start) + "ms");
             }
         });
+    }
+
+    private void initializeMetrics() {
+        int pluginId = 26366;
+        MetricsLite metrics = new MetricsLite(this, pluginId);
     }
 
     public Config getPluginConfig() {
