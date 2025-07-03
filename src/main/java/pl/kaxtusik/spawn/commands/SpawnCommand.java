@@ -5,7 +5,6 @@ import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Sender;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.permission.Permission;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.kaxtusik.spawn.Plugin;
@@ -34,7 +33,7 @@ public class SpawnCommand {
 
     @Execute
     void spawn(@Sender Player player, @Arg Optional<Player> target) {
-        if (!spawnManager.isSpawnSet()) {
+        if (spawnManager.isSpawnSet()) {
             MESSAGES_UTILS.message(player, messages.getSpawnNotSet().getType(), messages.getSpawnNotSet().getMessage());
             return;
         }

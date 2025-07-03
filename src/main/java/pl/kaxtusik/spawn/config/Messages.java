@@ -2,8 +2,12 @@ package pl.kaxtusik.spawn.config;
 
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
+import lombok.Getter;
 import pl.kaxtusik.spawn.models.Message;
 
+import java.util.Map;
+
+@Getter
 public class Messages extends OkaeriConfig {
 
     @Comment("Message displayed after reloading the configuration")
@@ -18,8 +22,15 @@ public class Messages extends OkaeriConfig {
     @Comment("Message displayed after setting the spawn location")
     private Message spawnSet = new Message("CHAT", "&aSpawn location set!");
 
+    @Comment("Local time format for specific numbers (number -> time unit)")
+    private Map<Integer, String> localFormat = Map.of(
+            1, "second",
+            2, "seconds",
+            3, "seconds"
+    );
+
     @Comment("Message displayed during teleportation with remaining time")
-    private Message teleporting = new Message("CHAT", "&aTeleporting in {TIME} seconds!");
+    private Message teleporting = new Message("CHAT", "&aTeleporting in {TIME} {FORMAT}!");
 
     @Comment("Message displayed after teleporting another player")
     private Message teleportingOthers = new Message("CHAT", "&aYou have teleported {PLAYER} to spawn!");
@@ -41,52 +52,4 @@ public class Messages extends OkaeriConfig {
 
     @Comment("Message sent when console tries to use a player command")
     private Message playerOnly = new Message("CHAT", "&cThis command can only be used by players!");
-
-    public Message getReloadedConfig() {
-        return reloadedConfig;
-    }
-
-    public Message getReloadedMessages() {
-        return reloadedMessages;
-    }
-
-    public Message getSpawnNotSet() {
-        return spawnNotSet;
-    }
-
-    public Message getSpawnSet() {
-        return spawnSet;
-    }
-
-    public Message getTeleporting() {
-        return teleporting;
-    }
-
-    public Message getTeleportingOthers() {
-        return teleportingOthers;
-    }
-
-    public Message getTeleported() {
-        return teleported;
-    }
-
-    public Message getTeleportCancelled() {
-        return teleportCancelled;
-    }
-
-    public Message getPlayerNotFound() {
-        return playerNotFound;
-    }
-
-    public Message getPlayerOnly() {
-        return playerOnly;
-    }
-
-    public Message getInvalidUsage() {
-        return invalidUsage;
-    }
-
-    public Message getNoPermission() {
-        return noPermission;
-    }
 }

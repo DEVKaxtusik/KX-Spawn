@@ -6,6 +6,7 @@ import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
+import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,10 +28,13 @@ import java.io.File;
 public final class Plugin extends JavaPlugin {
 
     public static Plugin INSTANCE;
+    @Getter
     private FoliaLib foliaLib;
     private final MessagesUtils messagesUtils = new MessagesUtils();
     private Config config;
+    @Getter
     private Messages messages;
+    @Getter
     private SpawnManager spawnManager;
     private SpawnTask spawnTask;
     private LiteCommands<CommandSender> liteCommands;
@@ -39,7 +43,6 @@ public final class Plugin extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
         foliaLib = new FoliaLib(this);
-        foliaLib.disableInvalidTickValueWarning();
         new ColorUtils();
         this.getLogger().info(VersionUtil.getDistribution() + " " + VersionUtil.getVersion().split("-")[0]);
         loadConfig();
@@ -134,15 +137,4 @@ public final class Plugin extends JavaPlugin {
         return config;
     }
 
-    public Messages getMessages() {
-        return messages;
-    }
-
-    public SpawnManager getSpawnManager() {
-        return spawnManager;
-    }
-
-    public FoliaLib getFoliaLib() {
-        return foliaLib;
-    }
 }

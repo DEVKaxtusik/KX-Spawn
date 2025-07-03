@@ -1,5 +1,6 @@
 package pl.kaxtusik.spawn.manager;
 
+import lombok.Getter;
 import org.bukkit.Location;
 import pl.kaxtusik.spawn.Plugin;
 import pl.kaxtusik.spawn.config.Config;
@@ -9,8 +10,11 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SpawnManager {
+    @Getter
     private Location spawnLocation;
     private Config config;
+
+    @Getter
     private final Map<UUID, Long> toTeleport = new ConcurrentHashMap<>();
 
     public SpawnManager(Plugin plugin) {
@@ -36,16 +40,8 @@ public class SpawnManager {
         }
     }
 
-    public Map<UUID, Long> getToTeleport() {
-        return toTeleport;
-    }
-
-    public Location getSpawnLocation() {
-        return spawnLocation;
-    }
-
     public boolean isSpawnSet() {
-        return spawnLocation != null;
+        return spawnLocation == null;
     }
 
     public void updateSpawnLocation(Location newLocation) {

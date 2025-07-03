@@ -34,7 +34,7 @@ public class SpawnTask implements Runnable {
 
     @Override
     public void run() {
-        if (spawnManager == null || !spawnManager.isSpawnSet()) {
+        if (spawnManager == null || spawnManager.isSpawnSet()) {
             if (spawnManager != null) {
                 spawnManager.getToTeleport().clear();
             }
@@ -69,10 +69,29 @@ public class SpawnTask implements Runnable {
                 return true;
             }
 
-            messagesUtils.message(player, messages.getTeleporting().getType(), messages.getTeleporting().getMessage().replace("{TIME}", String.valueOf(timeToTeleport - elapsedSeconds)));
+            int remainingTime = (int) (timeToTeleport - elapsedSeconds);
+            String formattedTimeUnit = formatTime(remainingTime);
+            String teleportMessage = messages.getTeleporting().getMessage()
+                    .replace("{TIME}", String.valueOf(remainingTime))
+                    .replace("{FORMAT}", formattedTimeUnit);
+            messagesUtils.message(player, messages.getTeleporting().getType(), teleportMessage);
 
             return false;
         });
+    }
+
+    private String formatTime(int seconds) {
+        Map<Integer, String> localFormat = messages.getLocalFormat();
+
+        if (localFormat.containsKey(seconds)) {
+            return localFormat.get(seconds);
+        }
+
+        if (seconds == 1) {
+            return "second";
+        } else {
+            return "seconds";
+        }
     }
 
     public void updateTimeToTeleport(int newTimeToTeleport) {
@@ -91,8 +110,6 @@ public class SpawnTask implements Runnable {
         UUID uuid = player.getUniqueId();
         Location currentLocation = player.getLocation();
 
-        if (currentLocation == null) return false;
-
         Location lastLocation = lastLocations.get(uuid);
 
         if (lastLocation == null) {
@@ -107,6 +124,4 @@ public class SpawnTask implements Runnable {
 
         return false;
     }
-
-
 }

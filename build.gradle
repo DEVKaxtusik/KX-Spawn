@@ -1,10 +1,12 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.DontIncludeResourceTransformer
+
 plugins {
     id 'java'
     id("com.gradleup.shadow") version "9.0.0-beta12"
 }
 
 group = 'pl.kaxtusik'
-version = '1.0-RELEASE'
+version = '1.1-RELEASE'
 
 repositories {
     mavenCentral()
@@ -34,10 +36,12 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
-    implementation 'dev.rollczi:litecommands-bukkit:3.9.7'
-    implementation 'eu.okaeri:okaeri-configs-yaml-bukkit:5.0.6'
-    implementation 'eu.okaeri:okaeri-configs-serdes-bukkit:5.0.6'
+    implementation 'dev.rollczi:litecommands-bukkit:3.10.0'
+    implementation 'eu.okaeri:okaeri-configs-yaml-bukkit:5.0.9'
+    implementation 'eu.okaeri:okaeri-configs-serdes-bukkit:5.0.9'
     implementation("com.tcoded:FoliaLib:0.5.1")
+    implementation("org.projectlombok:lombok:1.18.38")
+    annotationProcessor("org.projectlombok:lombok:1.18.38")
 }
 
 def targetJavaVersion = 17
@@ -54,6 +58,21 @@ shadowJar {
     relocate "com.tcoded.folialib", "pl.kaxtusik.libs.folialib"
     relocate "dev.rollczi.litecommands", "pl.kaxtusik.libs.litecommands"
     relocate "eu.okaeri", "pl.kaxtusik.libs.okaeri"
+    relocate("lombok", "pl.kaxtusik.libs.lombok")
+
+    transform(DontIncludeResourceTransformer) {
+        resource = "META-INF/MANIFEST.MF"
+    }
+
+    exclude 'META-INF/**'
+    exclude("AUTHORS")
+    exclude("changelog.txt")
+    exclude("README.md")
+    exclude("release-timestamp.txt")
+    exclude("LICENSE")
+    exclude("latestchanges.html")
+
+    minimizeJar
 }
 
 tasks.withType(JavaCompile).configureEach {

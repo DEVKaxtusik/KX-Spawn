@@ -1,5 +1,6 @@
 package pl.kaxtusik.spawn.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,26 +9,25 @@ import pl.kaxtusik.spawn.Plugin;
 import pl.kaxtusik.spawn.config.Config;
 import pl.kaxtusik.spawn.manager.SpawnManager;
 
+@RequiredArgsConstructor
 public class FirstJoinEvent implements Listener {
 
-    private Config config;
-    private SpawnManager spawnManager;
-
-    public FirstJoinEvent(Plugin plugin) {
-        this.config = plugin.getPluginConfig();
-        this.spawnManager = plugin.getSpawnManager();
-    }
+    private final Plugin plugin;
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
+        Config config = plugin.getPluginConfig();
+        SpawnManager spawnManager = plugin.getSpawnManager();
+
         if (!config.isTeleportOnFirstJoin()) {
             return;
         }
+
         final Player player = event.getPlayer();
         if (player.hasPlayedBefore()) {
             return;
         }
-        spawnManager.addToTeleport(player.getUniqueId(),System.currentTimeMillis()+(config.getTimeToTeleport()* 1000L));
-    }
 
+        spawnManager.addToTeleport(player.getUniqueId(), System.currentTimeMillis() + (config.getTimeToTeleport() * 1000L));
+    }
 }
