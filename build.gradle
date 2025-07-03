@@ -26,6 +26,10 @@ repositories {
         name = "jitpack"
         url = "https://jitpack.io"
     }
+    maven {
+        name = "tcoded-releases"
+        url = "https://repo.tcoded.com/releases"
+    }
 }
 
 dependencies {
@@ -33,7 +37,7 @@ dependencies {
     implementation 'dev.rollczi:litecommands-bukkit:3.9.7'
     implementation 'eu.okaeri:okaeri-configs-yaml-bukkit:5.0.6'
     implementation 'eu.okaeri:okaeri-configs-serdes-bukkit:5.0.6'
-    implementation "com.github.technicallycoded:FoliaLib:main-SNAPSHOT"
+    implementation("com.tcoded:FoliaLib:0.5.1")
 }
 
 def targetJavaVersion = 17

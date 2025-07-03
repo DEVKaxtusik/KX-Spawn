@@ -38,6 +38,13 @@ public class SpawnCommand {
             MESSAGES_UTILS.message(player, messages.getSpawnNotSet().getType(), messages.getSpawnNotSet().getMessage());
             return;
         }
+
+        if (player.hasPermission("kx.spawn.bypass")) {
+            MESSAGES_UTILS.message(player, messages.getTeleported().getType(), messages.getTeleported().getMessage());
+            plugin.getFoliaLib().getScheduler().teleportAsync(player,config.getSpawnLocation());
+            return;
+        }
+
         if (target.isPresent()) {
             if (!player.hasPermission("kx.spawn.others")) {
                 MESSAGES_UTILS.message(player, messages.getNoPermission().getType(), messages.getNoPermission().getMessage().replace("{PERMISSION}", "kx.spawn.others"));
@@ -47,9 +54,7 @@ public class SpawnCommand {
             MESSAGES_UTILS.message(target.get(), messages.getTeleported().getType(), messages.getTeleported().getMessage());
             return;
         }
-        if (player.hasPermission("kx.spawn.bypass")) {
-            plugin.getFoliaLib().getScheduler().teleportAsync(player,config.getSpawnLocation());
-        }
+
         spawnManager.addToTeleport(player.getUniqueId());
     }
 
