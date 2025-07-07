@@ -3,7 +3,7 @@ package pl.kaxtusik.spawn.manager;
 import lombok.Getter;
 import org.bukkit.Location;
 import pl.kaxtusik.spawn.Plugin;
-import pl.kaxtusik.spawn.config.Config;
+import pl.kaxtusik.spawn.bridge.config.Config;
 
 import java.util.Map;
 import java.util.UUID;

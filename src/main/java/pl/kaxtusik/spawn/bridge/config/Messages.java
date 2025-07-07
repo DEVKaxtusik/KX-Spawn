@@ -1,4 +1,4 @@
-package pl.kaxtusik.spawn.config;
+package pl.kaxtusik.spawn.bridge.config;
 
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;

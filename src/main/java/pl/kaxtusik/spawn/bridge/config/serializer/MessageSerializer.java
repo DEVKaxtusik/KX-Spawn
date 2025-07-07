@@ -1,4 +1,4 @@
-package pl.kaxtusik.spawn.config.serializer;
+package pl.kaxtusik.spawn.bridge.config.serializer;
 
 import eu.okaeri.configs.schema.GenericsDeclaration;
 import eu.okaeri.configs.serdes.DeserializationData;

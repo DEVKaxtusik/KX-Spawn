@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import pl.kaxtusik.spawn.Plugin;
-import pl.kaxtusik.spawn.config.Messages;
+import pl.kaxtusik.spawn.bridge.config.Messages;
 import pl.kaxtusik.spawn.manager.SpawnManager;
 import pl.kaxtusik.spawn.utils.MessagesUtils;
 
