@@ -1,4 +1,4 @@
-package pl.kaxtusik.spawn.commands.resolvers;
+package pl.kaxtusik.spawn.bridge.litecommands.resolvers;
 
 import dev.rollczi.litecommands.handler.result.ResultHandlerChain;
 import dev.rollczi.litecommands.invalidusage.InvalidUsage;
@@ -7,7 +7,7 @@ import dev.rollczi.litecommands.invocation.Invocation;
 import dev.rollczi.litecommands.schematic.Schematic;
 import org.bukkit.command.CommandSender;
 import pl.kaxtusik.spawn.Plugin;
-import pl.kaxtusik.spawn.config.Messages;
+import pl.kaxtusik.spawn.bridge.config.Messages;
 import pl.kaxtusik.spawn.utils.MessagesUtils;
 
 public class InvalidUsageResolver implements InvalidUsageHandler<CommandSender> {

@@ -3,6 +3,7 @@ package pl.kaxtusik.spawn;
 import com.tcoded.folialib.FoliaLib;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
+import dev.rollczi.litecommands.scope.Scope;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.bukkit.YamlBukkitConfigurer;
 import eu.okaeri.configs.yaml.bukkit.serdes.SerdesBukkit;
@@ -10,12 +11,15 @@ import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.kaxtusik.spawn.commands.SpawnCommand;
-import pl.kaxtusik.spawn.commands.resolvers.InvalidUsageResolver;
-import pl.kaxtusik.spawn.commands.resolvers.PermissionResolver;
-import pl.kaxtusik.spawn.config.Config;
-import pl.kaxtusik.spawn.config.Messages;
-import pl.kaxtusik.spawn.config.serializer.MessageSerializer;
+import pl.kaxtusik.spawn.bridge.litecommands.commands.SpawnCommand;
+import pl.kaxtusik.spawn.bridge.litecommands.editor.CommandEditor;
+import pl.kaxtusik.spawn.bridge.litecommands.resolvers.InvalidUsageResolver;
+import pl.kaxtusik.spawn.bridge.litecommands.resolvers.PermissionResolver;
+import pl.kaxtusik.spawn.bridge.config.Config;
+import pl.kaxtusik.spawn.bridge.config.Messages;
+import pl.kaxtusik.spawn.bridge.config.serializer.CommandSerializer;
+import pl.kaxtusik.spawn.bridge.config.serializer.MessageSerializer;
+import pl.kaxtusik.spawn.bridge.config.serializer.SubCommandSerializer;
 import pl.kaxtusik.spawn.listeners.ActionListener;
 import pl.kaxtusik.spawn.manager.SpawnManager;
 import pl.kaxtusik.spawn.metrics.MetricsLite;
@@ -59,7 +63,10 @@ public final class Plugin extends JavaPlugin {
 
     private void loadConfig() {
         this.config = ConfigManager.create(Config.class, (it) -> {
-            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit(), registry -> registry.register(new MessageSerializer()));
+            it.withConfigurer(new YamlBukkitConfigurer(), new SerdesBukkit(),
+                    registry -> registry.register(new MessageSerializer()),
+                    registry -> registry.register(new SubCommandSerializer()),
+                    registry -> registry.register(new CommandSerializer()));
             it.withBindFile(new File(this.getDataFolder(), "config.yml"));
             it.withRemoveOrphans(true);
             it.saveDefaults();
@@ -91,6 +98,7 @@ public final class Plugin extends JavaPlugin {
                 .commands(new SpawnCommand(this))
                 .missingPermission(new PermissionResolver(this))
                 .invalidUsage(new InvalidUsageResolver(this))
+                .editor(Scope.GLOBAL_SCOPE,new CommandEditor(config))
                 .build();
     }
 

@@ -1,21 +1,23 @@
-package pl.kaxtusik.spawn.commands;
+package pl.kaxtusik.spawn.bridge.litecommands.commands;
 
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Sender;
+import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.kaxtusik.spawn.Plugin;
-import pl.kaxtusik.spawn.config.Config;
-import pl.kaxtusik.spawn.config.Messages;
+import pl.kaxtusik.spawn.bridge.config.Config;
+import pl.kaxtusik.spawn.bridge.config.Messages;
 import pl.kaxtusik.spawn.manager.SpawnManager;
 import pl.kaxtusik.spawn.utils.MessagesUtils;
 
 import java.util.Optional;
 
 @Command(name = "spawn")
+@Description("Main spawn command for teleporting players")
 public class SpawnCommand {
 
     private final Plugin plugin;
@@ -23,30 +25,35 @@ public class SpawnCommand {
     private final Messages messages;
     private final SpawnManager spawnManager;
     private static final MessagesUtils MESSAGES_UTILS = new MessagesUtils();
+    private final String teleportOthers;
+    private final String teleportBypass;
 
     public SpawnCommand(Plugin plugin) {
         this.plugin = plugin;
         this.config = plugin.getPluginConfig();
+        teleportOthers = config.getTeleportOthersPermission();
+        teleportBypass = config.getTeleportBypassPermission();
         this.messages = plugin.getMessages();
         this.spawnManager = plugin.getSpawnManager();
     }
 
     @Execute
+    @Description("Teleport yourself or another player to spawn")
     void spawn(@Sender Player player, @Arg Optional<Player> target) {
         if (spawnManager.isSpawnSet()) {
             MESSAGES_UTILS.message(player, messages.getSpawnNotSet().getType(), messages.getSpawnNotSet().getMessage());
             return;
         }
 
-        if (player.hasPermission("kx.spawn.bypass")) {
+        if (player.hasPermission(teleportBypass)) {
             MESSAGES_UTILS.message(player, messages.getTeleported().getType(), messages.getTeleported().getMessage());
             plugin.getFoliaLib().getScheduler().teleportAsync(player,config.getSpawnLocation());
             return;
         }
 
         if (target.isPresent()) {
-            if (!player.hasPermission("kx.spawn.others")) {
-                MESSAGES_UTILS.message(player, messages.getNoPermission().getType(), messages.getNoPermission().getMessage().replace("{PERMISSION}", "kx.spawn.others"));
+            if (!player.hasPermission(teleportOthers)) {
+                MESSAGES_UTILS.message(player, messages.getNoPermission().getType(), messages.getNoPermission().getMessage().replace("{PERMISSION}", teleportOthers));
                 return;
             }
             plugin.getFoliaLib().getScheduler().teleportAsync(target.get(), spawnManager.getSpawnLocation());
@@ -58,7 +65,7 @@ public class SpawnCommand {
     }
 
     @Execute(name = "set")
-    @Permission("kx.spawn.set")
+    @Description("Set the spawn location to your current position")
     void set(@Sender Player player) {
         plugin.getFoliaLib().getScheduler().runAsync(task -> {
             config.setSpawnLocation(player.getLocation());
@@ -70,7 +77,7 @@ public class SpawnCommand {
     }
 
     @Execute(name = "reload")
-    @Permission("kx.spawn.reload")
+    @Description("Reload plugin configuration and messages")
     void reload(@Sender CommandSender sender, @Arg ReloadType type) {
         switch (type) {
             case CONFIG -> plugin.reloadConfiguration(sender);
