@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'pl.kaxtusik'
-version = '1.1-RELEASE'
+version = '1.1.1-DEV'
 
 repositories {
     mavenCentral()
