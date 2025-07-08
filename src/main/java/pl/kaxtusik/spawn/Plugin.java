@@ -121,6 +121,7 @@ public final class Plugin extends JavaPlugin {
                     spawnTask.updateTimeToTeleport(config.getTimeToTeleport());
                     spawnTask.updateCanMove(config.isCanMove());
                     spawnManager.updateSpawnLocation(config.getSpawnLocation());
+                    spawnManager.updateInstantRegions(config.getInstantRegions());
                     messagesUtils.message(sender, messages.getReloadedConfig().getType(), messages.getReloadedConfig().getMessage());
                     getLogger().info("Configuration reloaded in " + (System.currentTimeMillis() - start) + "ms");
                 });

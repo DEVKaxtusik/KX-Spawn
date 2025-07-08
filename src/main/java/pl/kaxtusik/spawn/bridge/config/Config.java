@@ -10,6 +10,7 @@ import pl.kaxtusik.spawn.bridge.litecommands.models.SubCommand;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -23,6 +24,11 @@ public class Config extends OkaeriConfig {
     @Comment("Spawn location")
     private Location spawnLocation;
 
+    @Setter
+    @Comment("Regions where player can instantly be teleported to spawn")
+    private List<String> instantRegions = List.of(
+            "spawn"
+    );
     @Comment("Should a player be teleported when they first join")
     private boolean teleportOnFirstJoin = true;
 
