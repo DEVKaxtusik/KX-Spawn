@@ -37,7 +37,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
-    implementation 'dev.rollczi:litecommands-bukkit:3.10.0'
+    implementation 'dev.rollczi:litecommands-bukkit:3.10.2'
     implementation 'eu.okaeri:okaeri-configs-yaml-bukkit:5.0.9'
     implementation 'eu.okaeri:okaeri-configs-serdes-bukkit:5.0.9'
     implementation("com.tcoded:FoliaLib:0.5.1")
