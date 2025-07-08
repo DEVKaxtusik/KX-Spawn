@@ -29,7 +29,6 @@ public class Config extends OkaeriConfig {
     private List<String> instantRegions = List.of(
             "spawn"
     );
-
     @Comment("Should a player be teleported when they first join")
     private boolean teleportOnFirstJoin = true;
 
