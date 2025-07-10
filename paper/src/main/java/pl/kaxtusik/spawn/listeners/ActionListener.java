@@ -58,6 +58,10 @@ public class ActionListener implements Listener {
 
 
     private void teleportPlayerToSpawn(Player player) {
+        SpawnManager spawnManager = plugin.getSpawnManager();
+        if (!spawnManager.isSpawnSet()) {
+            return;
+        }
         plugin.getFoliaLib().getScheduler().teleportAsync(player, plugin.getSpawnManager().getSpawnLocation());
     }
 
