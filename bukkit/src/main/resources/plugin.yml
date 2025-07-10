@@ -1,0 +1,9 @@
+name: KX-Spawn
+version: '1.2-RELEASE'
+main: pl.kaxtusik.spawn.Plugin
+folia-supported: true
+description: 'A simple lightweight spawn plugin that supports Folia.'
+api-version: '1.21'
+authors: [ kaxtusik ]
+softdepend:
+  - WorldGuard
