@@ -14,8 +14,8 @@ java {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
     compileOnly 'dev.rollczi:litecommands-bukkit:3.10.4'
-    compileOnly 'eu.okaeri:okaeri-configs-yaml-bukkit:5.0.9'
-    compileOnly 'eu.okaeri:okaeri-configs-serdes-bukkit:5.0.9'
+    compileOnly 'eu.okaeri:okaeri-configs-yaml-bukkit:5.0.13'
+    compileOnly 'eu.okaeri:okaeri-configs-serdes-bukkit:5.0.13'
     implementation("com.tcoded:FoliaLib:0.5.1")
     compileOnly("org.projectlombok:lombok:1.18.38")
     annotationProcessor("org.projectlombok:lombok:1.18.38")
