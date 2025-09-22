@@ -17,8 +17,8 @@ dependencies {
     compileOnly 'eu.okaeri:okaeri-configs-yaml-bukkit:5.0.13'
     compileOnly 'eu.okaeri:okaeri-configs-serdes-bukkit:5.0.13'
     implementation("com.tcoded:FoliaLib:0.5.1")
-    compileOnly("org.projectlombok:lombok:1.18.40")
-    annotationProcessor("org.projectlombok:lombok:1.18.40")
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
     compileOnly 'com.github.cryptomorin:XSeries:13.3.3'
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.7'
 }
