@@ -17,7 +17,7 @@ dependencies {
     implementation("com.tcoded:FoliaLib:0.5.1")
     implementation("org.projectlombok:lombok:1.18.40")
     annotationProcessor("org.projectlombok:lombok:1.18.40")
-    implementation 'com.github.cryptomorin:XSeries:13.3.3'
+    implementation 'com.github.cryptomorin:XSeries:v13.6.0'
     compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.7'
 }
 
